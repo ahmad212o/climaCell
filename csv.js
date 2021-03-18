@@ -5,16 +5,16 @@ const csv = require("fast-csv");
 //-----------this is the code to ingest the scv files to the databases--------------------------------------
 
 //for (let i = 1; i < 4; i++)
-// importCsvData2MySQL(`/assets/file${i}.csv`, `data${i}`);
+//importCsvData2MySQL(`/assets/file${i}.csv`, `data${i}`);
 
 //-----------------------------------------------------------------------------------
 //this function connects to the database
 function connectToSql() {
   return mysql.createConnection({
-    host: "localhost",
-    user: "root",
+    host: "freedb.tech",
+    user: "freedbtech_ahmad",
     password: "ahmad1234",
-    database: "weatherDB",
+    database: "freedbtech_weatherdb",
     multipleStatements: true,
   });
 }
@@ -73,7 +73,7 @@ async function findSummary(lat, lon, callback) {
   const connection = connectToSql();
   connection.connect((error) => {
     if (error) {
-      console.error(error);
+      //console.error(error);
       connection.end();
     } else {
       const query1 = `select  data1.Temperature,data1.Precipitation from data1 where Latitude=${lat} AND Longitude=${lon} union `;
@@ -81,11 +81,12 @@ async function findSummary(lat, lon, callback) {
       const query3 = `select data3.Temperature,data3.Precipitation from data3 where Latitude=${lat} AND Longitude=${lon} order by Temperature desc;`;
       connection.query(query1 + query2 + query3, function (error, rows) {
         if (error) {
-          console.log(error);
+          //console.log(error);
+          callback(rows, error);
           connection.end();
         } else {
           connection.end();
-          callback(rows);
+          callback(rows, error);
         }
       });
     }
@@ -96,7 +97,7 @@ async function findData(lat, lon, callback) {
   const connection = connectToSql();
   connection.connect((error) => {
     if (error) {
-      console.error(error);
+      //console.error(error);
       connection.end();
     } else {
       const query1 = `select data1.forecast_time,data1.Temperature,data1.Precipitation from data1 where Latitude=${lat} AND Longitude=${lon};`;
@@ -104,11 +105,12 @@ async function findData(lat, lon, callback) {
       const query3 = `select data3.forecast_time,data3.Temperature,data3.Precipitation from data3 where Latitude=${lat} AND Longitude=${lon};`;
       connection.query(query1 + query2 + query3, function (error, rows) {
         if (error) {
-          console.log(error);
+          //console.log(error);
+          callback(rows, error);
           connection.end();
         } else {
           connection.end();
-          callback(rows);
+          callback(rows, error);
         }
       });
     }

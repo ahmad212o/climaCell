@@ -1,9 +1,9 @@
 const mysql = require("mysql2");
 const importCsv = require("../csv");
 exports.getData = (req, res, next) => {
-  importCsv.findData(req.params.lat, req.params.lon, (result) => {
+  importCsv.findData(req.params.lat, req.params.lon, (result, error) => {
     let data = [];
-    if (result[0][0]) {
+    if (!error) {
       for (let i = 0; i < 3; i++) {
         data.push({
           forecast_time: result[i][0].forecast_time,
@@ -13,6 +13,8 @@ exports.getData = (req, res, next) => {
       }
       return res.status(200).json(data);
     }
-    return res.status(404).json("there is no weather data for this place ");
+    return res
+      .status(404)
+      .json(error + " there is no weather data for this place ");
   });
 };
