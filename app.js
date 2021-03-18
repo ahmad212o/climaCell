@@ -9,4 +9,4 @@ app.get("/", (req, res, next) => {
 });
 app.use("/weather", weather);
 
-const server = app.listen(3000);
+const server = app.listen(process.env.PORT || 5000);
