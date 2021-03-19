@@ -1,11 +1,14 @@
 const express = require("express");
 const mysql = require("mysql2");
 const app = express();
+const path = require("path");
 const importCsv = require("./csv");
 const weather = require("./Routes/weather");
+console.log(__dirname + "/public");
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res, next) => {
-  return res.json("hi");
+  return res.sendFile(path.join(__dirname + "/templates/index.html"));
 });
 app.use("/weather", weather);
 
