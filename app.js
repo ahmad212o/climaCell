@@ -4,7 +4,6 @@ const app = express();
 const path = require("path");
 const importCsv = require("./csv");
 const weather = require("./Routes/weather");
-console.log(__dirname + "/public");
 app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res, next) => {
