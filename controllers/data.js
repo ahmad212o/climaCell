@@ -3,7 +3,7 @@ const importCsv = require("../csv");
 exports.getData = (req, res, next) => {
   importCsv.findData(req.params.lat, req.params.lon, (result, error) => {
     let data = [];
-    if (!error) {
+    if (!error && result[0][0]) {
       for (let i = 0; i < 3; i++) {
         data.push({
           forecast_time: result[i][0].forecast_time,

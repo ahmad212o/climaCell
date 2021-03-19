@@ -2,7 +2,7 @@ const importCsv = require("../csv");
 exports.getSummary = (req, res, next) => {
   importCsv.findSummary(req.params.lat, req.params.lon, (result, error) => {
     console.log(JSON.stringify(result));
-    if (!error) {
+    if (!error && result[0]) {
       let data = {
         max: {
           Temperature: result[0].Temperature,
