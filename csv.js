@@ -12,10 +12,11 @@ const sequelize = new Sequelize(
     dialect: "mysql",
   }
 );
-
+const queryInterface = sequelize.getQueryInterface();
 async function showAll(sequelize) {
   const queryInterface = await sequelize.getQueryInterface();
   const all = await queryInterface.showAllSchemas();
+  console.log(all);
   return all;
 }
 
@@ -56,9 +57,9 @@ async function insertToDataBase(
     const queryInterface = await sequelize.getQueryInterface();
     const col = cols(colsNames, DataTypes);
     await createNewTable(queryInterface, tableName, col);
-    let b = [];
-    for (let item of csvData) b.push(setRows(colsNames, item));
-    queryInterface.bulkInsert(tableName, b);
+    let rows = [];
+    for (let item of csvData) rows.push(setRows(colsNames, item));
+    queryInterface.bulkInsert(tableName, rows);
   } catch (err) {
     throw err;
   }
@@ -120,6 +121,14 @@ async function extractSchemasNames(schemas) {
       return schemaName;
     });
     return result[0];
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function dropTable(queryInterface, tableName) {
+  try {
+    await queryInterface.dropTable(tableName);
   } catch (err) {
     throw err;
   }
